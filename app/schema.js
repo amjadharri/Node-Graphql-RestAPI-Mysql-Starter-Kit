@@ -5,34 +5,15 @@ import {
 	GraphQLObjectType,
 	GraphQLSchema
 } from "graphql";
-import UserQueries from "./models/user/schema.js";
+import UserQueries from "./models/user/queries.js";
 import ForgetPasswordSchema from "./models/forgetPassword/schema.js";
-import DB from "./database.js"
-
-
-const Queries = new GraphQLObjectType({
-	name: "Query",
-	description: "Root query object",
-	fields() {
-		return {
-			...UserQueries
-		}
-	}
-});
-
-const Mutations = new GraphQLObjectType({
-	name: 'Mutations',
-	description: 'All mutations',
-	fields() {
-
-	}
-})
+import DB from "./database.js";
+import Queries from "./queries.js";
+import Mutations from "./mutations.js";
 
 const MainSchema = new GraphQLSchema({
   query: Queries,
-  mutations: Mutations
+  mutation: Mutations
 });
-
-
 
 export default MainSchema;

@@ -5,8 +5,6 @@ import {
 } from "graphql";
 
 
-
-
 export default new GraphQLObjectType({
 	name: 'ForgetPasswordSchema',
 	description: 'Graphql support for forgetPassword',

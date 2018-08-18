@@ -2,7 +2,6 @@ import Express from "express";
 import GraphHTTP from 'express-graphql';
 import Schema from './app/schema.js';
 
-
 const app = Express();
 
 const {

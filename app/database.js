@@ -8,14 +8,14 @@ const {
 	APP__DB_NAME,
 	APP__DB_DIALECT,
 	APP__DB_HOST,
-	APP__DB_FORCE_SYNC
+	APP__DB_FORCE_SYNC,
+	APP__RUN_SEEDS
 } = process.env;
 
 const DB = new Sequelize(APP__DB_NAME,APP__DB_USERNAME,APP__DB_PASSWORD,{
 	dialect: APP__DB_DIALECT,
 	host: APP__DB_HOST
 });
-
 
 const UserModel = DB.define('user',user);
 const ForgetPasswordModel = DB.define('forgetPassword',forgetPassword);
@@ -27,7 +27,9 @@ ForgetPasswordModel.belongsTo(UserModel);
 DB.sync({
 	force: (APP__DB_FORCE_SYNC == 'TRUE') ? true : false
 }).then(() => {
-	seeds()
+	if (APP__RUN_SEEDS.toLowerCase() == 'true') {
+		seeds()
+	}
 });
 
 export default DB;
