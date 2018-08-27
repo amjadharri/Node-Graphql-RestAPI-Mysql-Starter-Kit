@@ -2,7 +2,7 @@ import {
 	GraphQLObjectType
 } from 'graphql';
 
-import UserMutations from "./models/user/mutations.js"
+import UserMutations from "./modules/user/mutations.js"
 
 const Mutations = new GraphQLObjectType({
 	name: 'Mutations',

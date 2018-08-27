@@ -4,7 +4,7 @@ import {
 	GraphQLString
 } from "graphql";
 import UserMainSchema from "./schema.js";
-import DB from "./../../database.js";
+import UserController from "./UserController.js"
 
 const UserQueries = {
 	user: {
@@ -18,9 +18,23 @@ const UserQueries = {
 			}
 		},
 		resolve(root, args) {
-			return DB.models.user.findAll({where: args})
+			return UserController.allUsers(root, args);
 		}
 	},
+	login: {
+		type: UserMainSchema,
+		args: {
+			email: {
+				type: GraphQLString
+			},
+			password: {
+				type: GraphQLString
+			},
+		},
+		resolve(_, args) {
+			return UserController.login(_,args);
+		}
+	}
 }
 
 export default UserQueries

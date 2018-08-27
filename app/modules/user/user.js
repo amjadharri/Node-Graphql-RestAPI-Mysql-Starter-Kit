@@ -1,10 +1,14 @@
 import Sequelize from "sequelize";
 
-
 export default {
 	username: {
 		type: Sequelize.STRING,
 		allowNull: false,
+	},
+	token: {
+		type: Sequelize.STRING,
+		allowNull: true,
+		unique: false,
 	},
 	email: {
 		type: Sequelize.STRING,

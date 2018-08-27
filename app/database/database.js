@@ -1,7 +1,8 @@
 import Sequelize from "sequelize";
-import user from "./models/user/user"
-import forgetPassword from "./models/forgetPassword/forgetPassword";
-import seeds from "./seeds.js";
+import user from "./../modules/user/user"
+import forgetPassword from "./../modules/forgetPassword/forgetPassword";
+import seeds from "./../seeds.js";
+import makeRelations from "./relations.js";
 const {
 	APP__DB_USERNAME,
 	APP__DB_PASSWORD,
@@ -13,7 +14,7 @@ const {
 } = process.env;
 
 const DB = new Sequelize(APP__DB_NAME,APP__DB_USERNAME,APP__DB_PASSWORD,{
-	dialect: APP__DB_DIALECT,
+	dialect: 'mysql',
 	host: APP__DB_HOST
 });
 
@@ -24,11 +25,14 @@ const ForgetPasswordModel = DB.define('forgetPassword',forgetPassword);
 UserModel.hasMany(ForgetPasswordModel);
 ForgetPasswordModel.belongsTo(UserModel);
 
+makeRelations();
+
+
 DB.sync({
 	force: (APP__DB_FORCE_SYNC == 'TRUE') ? true : false
 }).then(() => {
 	if (APP__RUN_SEEDS.toLowerCase() == 'true') {
-		seeds()
+		seeds();
 	}
 });
 

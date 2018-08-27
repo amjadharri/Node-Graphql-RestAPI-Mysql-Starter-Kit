@@ -5,9 +5,9 @@ import {
 	GraphQLObjectType,
 	GraphQLSchema
 } from "graphql";
-import UserQueries from "./models/user/queries.js";
-import ForgetPasswordSchema from "./models/forgetPassword/schema.js";
-import DB from "./database.js";
+
+import DB from "./database/database.js";
+
 import Queries from "./queries.js";
 import Mutations from "./mutations.js";
 

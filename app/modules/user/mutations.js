@@ -5,8 +5,8 @@ import {
 	GraphQLNonNull
 } from "graphql";
 import UserMainSchema from "./schema.js";
-import DB from "./../../database.js";
-
+import DB from "./../../database/database.js";
+import UserController from "./UserController.js"
 
 const UserMutations  = {
 	createUser: {
@@ -22,12 +22,23 @@ const UserMutations  = {
 				type: new GraphQLNonNull(GraphQLString)
 			}
 		},
-		resolve(_, args) { 
-			return DB.models.user.create({
-				email: args.email,
-				username: args.username,
-				password: args.password
-			})
+		async resolve(_, args) {
+			return UserController.create(_, args);
+			
+		}
+	},
+	login: {
+		type: UserMainSchema,
+		args: {
+			email: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			password: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		async resolve(_, args) {
+			
 		}
 	}
 }

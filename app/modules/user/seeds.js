@@ -1,5 +1,5 @@
 import _ from "lodash";
-import {userModel} from "./../../database.js";
+import {userModel} from "./../../database/database.js";
 
 import Faker from "faker";
 
