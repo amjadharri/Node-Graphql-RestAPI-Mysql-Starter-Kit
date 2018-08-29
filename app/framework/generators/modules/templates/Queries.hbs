@@ -1,0 +1,32 @@
+import {
+	GraphQLList,
+	GraphQLInt,
+	GraphQLString
+} from "graphql";
+import {{controllerName name}}MainSchema from "./schema.js";
+import {{controllerName name}}Controller from "./Controller.js"
+
+
+const {{controllerName name}}Queries = {
+	{{controllerName name}}View: {
+		type: {{controllerName name}}MainSchema,
+		args: {
+		},
+		async resolve(_, args) {
+
+		}
+
+	},
+	{{controllerName name}}ViewAll: {
+		type: {{controllerName name}}MainSchema,
+		args: {
+			page: {},
+			limit: {}
+		},
+		async resolve(_, args) {
+
+		}
+	},
+}
+
+export default {{controllerName name}}Queries;

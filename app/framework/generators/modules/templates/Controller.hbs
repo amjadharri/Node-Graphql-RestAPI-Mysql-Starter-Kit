@@ -1,0 +1,53 @@
+import DB from "./../../database/database.js";
+
+class {{controllerName name}}Controller {
+	constructor() {
+		// constructor method
+	}
+	{{controllerName name}}ViewAll(_, args) {
+		try {
+
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
+
+	async {{controllerName name}}Create(_, args) {
+		try {
+			return DB.models.{{controllerName name}}.create(args);
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
+
+	{{controllerName name}}Update(_, args) {
+		try {
+
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
+
+	{{controllerName name}}View(_, args) {
+		try {
+
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
+}
+
+
+export default new {{controllerName name}}Controller

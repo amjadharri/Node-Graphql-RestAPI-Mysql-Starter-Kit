@@ -1,0 +1,54 @@
+import Joi from 'joi';
+import {
+	GraphQLObjectType,
+	GraphQLInt,
+	GraphQLList,
+	GraphQLString,
+} from "graphql";
+
+import DB from "./../../database/database.js";
+
+export let validations = Joi.object().keys({
+});
+
+const {{controllerName name}}MainSchema = new GraphQLObjectType({
+	name: '{{controllerName name}}Schema',
+	description: 'Graphql support for {{name}}',
+	fields() {
+		return {
+			errorMessage: {
+				type: GraphQLString,
+				resolve({{name}}) {
+					return {{name}}.errorMessage || '';
+				}
+			},
+			errorMessageType: {
+				type: GraphQLString,
+				resolve({{name}}) {
+					return {{name}}.errorMessageType || '';
+				}
+			},
+			id: {
+				type: GraphQLInt,
+				resolve({{name}}) {
+					return {{name}}.id;
+				}
+			},
+			createdAt: {
+				type: GraphQLString,
+				resolve({{name}}) {
+					return {{name}}.createdAt;
+				} 
+			},
+			updatedAt: {
+				type: GraphQLString,
+				resolve({{name}}) {
+					return {{name}}.updatedAt;
+				}
+			},
+		}
+	}
+})
+
+
+export default UserMainSchema

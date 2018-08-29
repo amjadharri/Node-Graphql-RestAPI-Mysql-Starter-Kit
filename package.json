@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon index --exec \"node -r dotenv/config -r babel-register\""
+    "dev": "cross-env NODE_ENV=development nodemon index --exec \"node -r dotenv/config -r babel-register\"",
+    "generate": "plop --plopfile app/framework/generators/index.js --require babel-core/register"
   },
   "author": "",
   "license": "ISC",
@@ -41,7 +42,7 @@
     "babel-register": "^6.26.0",
     "cross-env": "^5.1.3",
     "mocha": "^5.0.5",
-    "plop": "^2.0.0",
+    "plop": "^2.1.0",
     "rimraf": "^2.6.2",
     "supertest": "^3.0.0"
   }

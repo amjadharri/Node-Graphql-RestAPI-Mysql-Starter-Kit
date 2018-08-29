@@ -6,7 +6,7 @@ import {
 } from "graphql";
 import UserMainSchema from "./schema.js";
 import DB from "./../../database/database.js";
-import UserController from "./UserController.js"
+import UserController from "./Controller.js"
 
 const UserMutations  = {
 	createUser: {
@@ -24,7 +24,6 @@ const UserMutations  = {
 		},
 		async resolve(_, args) {
 			return UserController.create(_, args);
-			
 		}
 	},
 	login: {
@@ -44,4 +43,4 @@ const UserMutations  = {
 }
 
 
-export default UserMutations
+export default UserMutations;

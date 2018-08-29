@@ -4,7 +4,7 @@ import {
 	GraphQLString
 } from "graphql";
 import UserMainSchema from "./schema.js";
-import UserController from "./UserController.js"
+import UserController from "./Controller.js"
 
 const UserQueries = {
 	user: {
@@ -32,7 +32,11 @@ const UserQueries = {
 			},
 		},
 		resolve(_, args) {
-			return UserController.login(_,args);
+			try {
+				return UserController.login(_,args);
+			} catch (e) {
+				console.log(e);
+			}
 		}
 	}
 }
