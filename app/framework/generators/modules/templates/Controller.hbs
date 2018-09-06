@@ -4,9 +4,9 @@ class {{controllerName name}}Controller {
 	constructor() {
 		// constructor method
 	}
-	{{controllerName name}}ViewAll(_, args) {
+	async {{controllerName name}}ViewAll(_, args) {
 		try {
-
+			
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
@@ -17,7 +17,14 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Create(_, args) {
 		try {
-			return DB.models.{{controllerName name}}.create(args);
+			try {
+				return DB.models.{{controllerName name}}.create(args);
+			}catch (e) {
+				return {
+					errorMessageType: 'Backend Error',
+					errorMessage: `Something went wrong while creating {{controllerName name}}, ${e.message}`
+				}
+			}
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
@@ -26,7 +33,7 @@ class {{controllerName name}}Controller {
 		}
 	}
 
-	{{controllerName name}}Update(_, args) {
+	async {{controllerName name}}Update(_, args) {
 		try {
 
 		} catch (e) {
@@ -37,7 +44,18 @@ class {{controllerName name}}Controller {
 		}
 	}
 
-	{{controllerName name}}View(_, args) {
+	async {{controllerName name}}Delete(_, args) {
+		try {
+
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
+
+	async {{controllerName name}}View(_, args) {
 		try {
 
 		} catch (e) {

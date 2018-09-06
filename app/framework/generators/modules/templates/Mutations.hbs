@@ -6,28 +6,23 @@ import {
 } from "graphql";
 import {{controllerName name}}MainSchema from "./schema.js";
 import DB from "./../../database/database.js";
-import {{controllerName name}}Controller from "./Controller.js"
+import {{controllerName name}}Controller from "./Controller.js";
+import Arguments from "./Arguments.js"
 
 
 const {{controllerName name}}Mutations  = {
 	{{controllerName name}}Update: {
 		type: {{controllerName name}}MainSchema,
-		args: {
-			id: {
-				type: new GraphQLNonNull(GraphQLInt)
-			},
-		},
+		args: Arguments,
 		async resolve(_, args) {
-
+			return {{controllerName name}}Controller.{{controllerName name}}Update(_, args);
 		}
 	},
 	{{controllerName name}}Create: {
 		type: {{controllerName name}}MainSchema,
-		args: {
-			
-		},
+		args: Arguments,
 		async resolve(_, args) {
-
+			return {{controllerName name}}Controller.{{controllerName name}}Create(_, args);
 		}
 	},
 	{{controllerName name}}Delete: {
@@ -38,7 +33,7 @@ const {{controllerName name}}Mutations  = {
 			},
 		},
 		async resolve(_, args) {
-
+			return {{controllerName name}}Controller.{{controllerName name}}Delete(_, args);
 		}
 	},
 }

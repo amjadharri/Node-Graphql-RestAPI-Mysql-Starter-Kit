@@ -19,7 +19,12 @@ module.exports = {
         {
             type: 'input',
             name: 'tableFields',
-            message: 'Please enter the table fields in this format name:string, age: number: (lowercase)',
+            message: `
+Please enter the table fields in this format name:string, age: number: (lowercase). 
+Supported types are: 
+    STRING, BOOLEAN, TEXT,  JSON,    JSONB,  GEOMETRY, DATE, 
+    ARRAY(PostgreSQL ONLY), DECIMAL, DOUBLE, INTEGER
+            `,
         },
         {
             type: 'confirm',
@@ -37,33 +42,30 @@ module.exports = {
                     path: './a/Controller.js',
                     templateFile: './modules/templates/Controller.hbs',
                 });
-            }
-            if (data.name) {
                 actions.push({
                     type: 'add',
                     path: './a/{{controllerName name}}.js',
                     templateFile: './modules/templates/Model.hbs',
                 });
-            }
-            if (data.name) {
                 actions.push({
                     type: 'add',
                     path: './a/Queries.js',
                     templateFile: './modules/templates/Queries.hbs',
                 });
-            }
-            if (data.name) {
                 actions.push({
                     type: 'add',
                     path: './a/Mutations.js',
                     templateFile: './modules/templates/Mutations.hbs',
                 });
-            }
-            if (data.name) {
                 actions.push({
                     type: 'add',
                     path: './a/Schema.js',
                     templateFile: './modules/templates/Schema.hbs',
+                });
+                actions.push({
+                    type: 'add',
+                    path: './a/Arguments.js',
+                    templateFile: './modules/templates/Arguments.hbs',
                 });
             }
             return actions;

@@ -9,6 +9,7 @@ import {
 import DB from "./../../database/database.js";
 
 export let validations = Joi.object().keys({
+	{{ validations tableFields }}
 });
 
 const {{controllerName name}}MainSchema = new GraphQLObjectType({
@@ -18,32 +19,35 @@ const {{controllerName name}}MainSchema = new GraphQLObjectType({
 		return {
 			errorMessage: {
 				type: GraphQLString,
-				resolve({{name}}) {
-					return {{name}}.errorMessage || '';
+				resolve(model) {
+					return model.errorMessage || '';
 				}
 			},
 			errorMessageType: {
 				type: GraphQLString,
-				resolve({{name}}) {
-					return {{name}}.errorMessageType || '';
+				resolve(model) {
+					return model.errorMessageType || '';
 				}
 			},
+
+			{{ schemaFields tableFields }}
+
 			id: {
 				type: GraphQLInt,
-				resolve({{name}}) {
-					return {{name}}.id;
+				resolve(model) {
+					return model.id;
 				}
 			},
 			createdAt: {
 				type: GraphQLString,
-				resolve({{name}}) {
-					return {{name}}.createdAt;
+				resolve(model) {
+					return model.createdAt;
 				} 
 			},
 			updatedAt: {
 				type: GraphQLString,
-				resolve({{name}}) {
-					return {{name}}.updatedAt;
+				resolve(model) {
+					return model.updatedAt;
 				}
 			},
 		}
