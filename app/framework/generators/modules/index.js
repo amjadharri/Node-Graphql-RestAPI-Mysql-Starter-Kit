@@ -1,3 +1,7 @@
+import generateFolder from "./../helpers/generateFolder.js";
+import folderExists from "./../helpers/folderExists.js";
+import controllerName from "./../helpers/controllerName";
+
 module.exports = {
     description: 'Create modules for Node JS Graphql MySQL',
     prompts: [
@@ -19,12 +23,12 @@ module.exports = {
         {
             type: 'input',
             name: 'tableFields',
-            message: `
-Please enter the table fields in this format name:string, age: number: (lowercase). 
+            message: `Please enter the table fields: (lowercase). 
 Supported types are: 
     STRING, BOOLEAN, TEXT,  JSON,    JSONB,  GEOMETRY, DATE, 
     ARRAY(PostgreSQL ONLY), DECIMAL, DOUBLE, INTEGER
-            `,
+Example: name:string, age: integer
+`,
         },
         {
             type: 'confirm',
@@ -39,35 +43,40 @@ Supported types are:
             if (data.name) {
                 actions.push({
                     type: 'add',
-                    path: './a/Controller.js',
+                    path: `./../..//modules/${data.name}/Controller.js`,
                     templateFile: './modules/templates/Controller.hbs',
                 });
                 actions.push({
                     type: 'add',
-                    path: './a/{{controllerName name}}.js',
+                    path: `./../..//modules/${data.name}/{{controllerName name}}.js`,
                     templateFile: './modules/templates/Model.hbs',
                 });
                 actions.push({
                     type: 'add',
-                    path: './a/Queries.js',
+                    path: `./../..//modules/${data.name}/Queries.js`,
                     templateFile: './modules/templates/Queries.hbs',
                 });
                 actions.push({
                     type: 'add',
-                    path: './a/Mutations.js',
+                    path: `./../..//modules/${data.name}/Mutations.js`,
                     templateFile: './modules/templates/Mutations.hbs',
                 });
                 actions.push({
                     type: 'add',
-                    path: './a/Schema.js',
+                    path: `./../..//modules/${data.name}/Schema.js`,
                     templateFile: './modules/templates/Schema.hbs',
                 });
                 actions.push({
                     type: 'add',
-                    path: './a/Arguments.js',
+                    path: `./../..//modules/${data.name}/Arguments.js`,
                     templateFile: './modules/templates/Arguments.hbs',
                 });
             }
+            if (folderExists(data.name)) {
+                console.log("Folder already exists. Sorry please try again.");
+                return [];
+            }
+            generateFolder(controllerName(data.name));
             return actions;
         }else {
             console.log("require all fields");

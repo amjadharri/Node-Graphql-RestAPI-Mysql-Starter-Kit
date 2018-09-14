@@ -17,6 +17,12 @@ const {{controllerName name}}MainSchema = new GraphQLObjectType({
 	description: 'Graphql support for {{name}}',
 	fields() {
 		return {
+			id: {
+				type: GraphQLInt,
+				resolve(model) {
+					return model.id;
+				}
+			},
 			errorMessage: {
 				type: GraphQLString,
 				resolve(model) {
@@ -29,15 +35,7 @@ const {{controllerName name}}MainSchema = new GraphQLObjectType({
 					return model.errorMessageType || '';
 				}
 			},
-
 			{{ schemaFields tableFields }}
-
-			id: {
-				type: GraphQLInt,
-				resolve(model) {
-					return model.id;
-				}
-			},
 			createdAt: {
 				type: GraphQLString,
 				resolve(model) {

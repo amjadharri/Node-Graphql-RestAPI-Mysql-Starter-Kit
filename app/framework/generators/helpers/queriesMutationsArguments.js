@@ -8,9 +8,9 @@ export default function (value) {
     let columnType = split[1].toLowerCase();
     output = output + `
 
-      ${columnName}: {
-        type: new GraphQLNonNull(${renderGraphqlType(columnType)})
-      },
+  ${columnName}: {
+    type: new GraphQLNonNull(${renderGraphqlType(columnType)})
+  },
 
     `
   });

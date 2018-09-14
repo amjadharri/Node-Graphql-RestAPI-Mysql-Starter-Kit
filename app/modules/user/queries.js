@@ -35,7 +35,10 @@ const UserQueries = {
 			try {
 				return UserController.login(_,args);
 			} catch (e) {
-				console.log(e);
+				return {
+					errorMessageType: "Something went wrong while login",
+					errorMessage: `${e.message}`
+				}
 			}
 		}
 	}

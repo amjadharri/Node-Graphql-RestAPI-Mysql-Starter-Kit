@@ -13,7 +13,7 @@ const {{controllerName name}}Queries = {
 		args: {
 		},
 		async resolve(_, args) {
-			return {{controllerName name}}Controller.view();
+			return {{controllerName name}}Controller.view(_, args);
 		}
 
 	},
@@ -24,7 +24,7 @@ const {{controllerName name}}Queries = {
 			limit: {}
 		},
 		async resolve(_, args) {
-			return {{controllerName name}}Controller.viewAll();
+			return {{controllerName name}}Controller.viewAll(_, args);
 		}
 	},
 }
