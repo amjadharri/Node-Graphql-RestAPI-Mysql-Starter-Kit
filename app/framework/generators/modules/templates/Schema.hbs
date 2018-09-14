@@ -13,7 +13,7 @@ export let validations = Joi.object().keys({
 });
 
 const {{controllerName name}}MainSchema = new GraphQLObjectType({
-	name: '{{controllerName name}}Schema',
+	name: `{{controllerName name}}Schema${Math.random().toString(36).substring(2)}`,
 	description: 'Graphql support for {{name}}',
 	fields() {
 		return {
@@ -53,4 +53,4 @@ const {{controllerName name}}MainSchema = new GraphQLObjectType({
 })
 
 
-export default UserMainSchema
+export default {{controllerName name}}MainSchema

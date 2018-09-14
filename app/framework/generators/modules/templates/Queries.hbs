@@ -3,7 +3,7 @@ import {
 	GraphQLInt,
 	GraphQLString
 } from "graphql";
-import {{controllerName name}}MainSchema from "./schema.js";
+import {{controllerName name}}MainSchema from "./Schema.js";
 import {{controllerName name}}Controller from "./Controller.js"
 
 
@@ -11,20 +11,30 @@ const {{controllerName name}}Queries = {
 	{{controllerName name}}View: {
 		type: {{controllerName name}}MainSchema,
 		args: {
+			id: {
+				type: GraphQLInt
+			}
 		},
 		async resolve(_, args) {
-			return {{controllerName name}}Controller.view(_, args);
+			return {{controllerName name}}Controller.{{controllerName name}}View(_, args);
 		}
 
 	},
 	{{controllerName name}}ViewAll: {
-		type: {{controllerName name}}MainSchema,
+		type: new GraphQLList({{controllerName name}}MainSchema),
 		args: {
-			page: {},
-			limit: {}
+			id: {
+				type: GraphQLInt
+			},
+			page: {
+				type: GraphQLString
+			},
+			limit: {
+				type: GraphQLString
+			},
 		},
 		async resolve(_, args) {
-			return {{controllerName name}}Controller.viewAll(_, args);
+			return {{controllerName name}}Controller.{{controllerName name}}ViewAll(_, args);
 		}
 	},
 }

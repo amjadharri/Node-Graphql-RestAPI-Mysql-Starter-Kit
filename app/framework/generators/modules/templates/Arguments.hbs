@@ -1,3 +1,7 @@
+import {GraphQLNonNull, GraphQLString} from 'graphql';
 export default {
   {{ queriesMutationsArguments tableFields }}
+}
+export let QueryParams = {
+  {{ queriesMutationsArguments tableFields }}	
 }

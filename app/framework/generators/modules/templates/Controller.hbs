@@ -6,7 +6,9 @@ class {{controllerName name}}Controller {
 	}
 	async {{controllerName name}}ViewAll(_, args) {
 		try {
-			
+			return DB.models.{{controllerName name}}.findAll({
+				where: args
+			})
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
