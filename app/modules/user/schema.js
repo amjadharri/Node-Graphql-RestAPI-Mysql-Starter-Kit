@@ -25,6 +25,19 @@ const UserMainSchema = new GraphQLObjectType({
 					return user.errorMessage || '';
 				}
 			},
+			
+			successMessage: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessage || '';
+				}
+			},
+			successMessageType: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessageType || '';
+				}
+			},
 			token: {
 				type: GraphQLString,
 				resolve(user) {

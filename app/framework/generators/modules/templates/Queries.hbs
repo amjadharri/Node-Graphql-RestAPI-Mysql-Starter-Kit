@@ -34,7 +34,7 @@ const {{controllerName name}}Queries = {
 			limit: {
 				type: GraphQLString
 			},
-			....QueryParams
+			...QueryParams
 		},
 		async resolve(_, args) {
 			return {{controllerName name}}Controller.{{controllerName name}}ViewAll(_, args);

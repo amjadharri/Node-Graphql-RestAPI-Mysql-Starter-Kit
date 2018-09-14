@@ -6,6 +6,7 @@ import controllerName from "./helpers/controllerName";
 import validations from "./helpers/validations";
 import queriesMutationsArguments from "./helpers/queriesMutationsArguments";
 import queryParams from "./helpers/queryParams";
+import toLowerCase from "./helpers/toLowerCase";
 // helpers
 
 
@@ -17,4 +18,5 @@ module.exports = function (plop) {
 	plop.addHelper('validations',validations);
 	plop.addHelper('queriesMutationsArguments', queriesMutationsArguments);
 	plop.addHelper('queryParams', queryParams);
+	plop.addHelper('toLowerCase', toLowerCase);
 }

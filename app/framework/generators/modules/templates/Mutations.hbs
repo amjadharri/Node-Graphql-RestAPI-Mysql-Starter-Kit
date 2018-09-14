@@ -13,7 +13,12 @@ import Arguments from "./Arguments.js"
 const {{controllerName name}}Mutations  = {
 	{{controllerName name}}Update: {
 		type: {{controllerName name}}MainSchema,
-		args: Arguments,
+		args: {
+			id: {
+				type: GraphQLInt
+			},
+			...Arguments
+		},
 		async resolve(_, args) {
 			return {{controllerName name}}Controller.{{controllerName name}}Update(_, args);
 		}

@@ -6,7 +6,7 @@ class {{controllerName name}}Controller {
 	}
 	async {{controllerName name}}ViewAll(_, args) {
 		try {
-			return DB.models.{{controllerName name}}.findAll({
+			return DB.models.{{toLowerCase name}}.findAll({
 				where: args
 			})
 		} catch (e) {
@@ -17,10 +17,11 @@ class {{controllerName name}}Controller {
 		}
 	}
 
+
 	async {{controllerName name}}Create(_, args) {
 		try {
 			try {
-				return DB.models.{{controllerName name}}.create(args);
+				return DB.models.{{toLowerCase name}}.create(args);
 			}catch (e) {
 				return {
 					errorMessageType: 'Backend Error',
@@ -37,7 +38,17 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Update(_, args) {
 		try {
-
+			let a = await DB.models.{{toLowerCase name}}.findById(args.id);
+			if (a) {
+				await a.updateAttributes(args);
+				return a;
+			}else {
+				return {
+					errorMessageType: 'Not Found',
+					errorMessage: `Record not found to update.`
+				}
+			}
+			return a;
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
@@ -48,7 +59,15 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Delete(_, args) {
 		try {
-
+			await DB.models.{{toLowerCase name}}.destroy({
+				where: {
+					id: args.id
+				}
+			});
+			return {
+				successMessageType: '{{controllerName name}} Delete',
+				successMessage: `{{controllerName name}} Delete successfully`
+			}
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
@@ -59,7 +78,7 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}View(_, args) {
 		try {
-
+			return await DB.models.{{ toLowerCase name }}.findById(args.id);
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',

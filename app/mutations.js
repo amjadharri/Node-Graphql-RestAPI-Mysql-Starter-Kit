@@ -9,7 +9,7 @@ const Mutations = new GraphQLObjectType({
 	description: 'All mutations',
 	fields() {
 		return {
-			...UserMutations
+			...UserMutations,
 		}
 	}
 })

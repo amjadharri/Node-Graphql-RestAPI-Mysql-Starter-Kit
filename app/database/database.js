@@ -1,8 +1,12 @@
 import Sequelize from "sequelize";
-import user from "./../modules/user/user"
-import forgetPassword from "./../modules/forgetPassword/forgetPassword";
 import seeds from "./../seeds.js";
 import makeRelations from "./relations.js";
+
+import user from "./../modules/user/user"
+import forgetPassword from "./../modules/forgetPassword/forgetPassword";
+
+
+
 const {
 	APP__DB_USERNAME,
 	APP__DB_PASSWORD,

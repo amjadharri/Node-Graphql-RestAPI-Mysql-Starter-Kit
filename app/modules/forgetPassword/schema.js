@@ -10,6 +10,33 @@ export default new GraphQLObjectType({
 	description: 'Graphql support for forgetPassword',
 	fields() {
 		return {
+
+			successMessage: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessage || '';
+				}
+			},
+			successMessageType: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessageType || '';
+				}
+			},
+			errorMessage: {
+				type: GraphQLString,
+				resolve(user) {
+					return user.errorMessage || '';
+				}
+			},
+			
+			errorMessageType: {
+				type: GraphQLString,
+				resolve(user) {
+					return user.errorMessageType || '';
+				}
+			},
+			
 			id: {
 				type: GraphQLInt,
 				resolve(forgetPassword) {

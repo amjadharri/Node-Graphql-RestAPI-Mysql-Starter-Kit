@@ -35,6 +35,18 @@ const {{controllerName name}}MainSchema = new GraphQLObjectType({
 					return model.errorMessageType || '';
 				}
 			},
+			successMessage: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessage || '';
+				}
+			},
+			successMessageType: {
+				type: GraphQLString,
+				resolve(model) {
+					return model.successMessageType || '';
+				}
+			},
 			{{ schemaFields tableFields }}
 			createdAt: {
 				type: GraphQLString,
