@@ -5,6 +5,7 @@ import {
 } from "graphql";
 import {{controllerName name}}MainSchema from "./Schema.js";
 import {{controllerName name}}Controller from "./Controller.js"
+import {QueryParams} from "./Arguments.js";
 
 
 const {{controllerName name}}Queries = {
@@ -13,7 +14,8 @@ const {{controllerName name}}Queries = {
 		args: {
 			id: {
 				type: GraphQLInt
-			}
+			},
+			...QueryParams
 		},
 		async resolve(_, args) {
 			return {{controllerName name}}Controller.{{controllerName name}}View(_, args);
@@ -32,6 +34,7 @@ const {{controllerName name}}Queries = {
 			limit: {
 				type: GraphQLString
 			},
+			....QueryParams
 		},
 		async resolve(_, args) {
 			return {{controllerName name}}Controller.{{controllerName name}}ViewAll(_, args);

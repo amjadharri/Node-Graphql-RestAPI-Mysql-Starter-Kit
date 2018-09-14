@@ -5,6 +5,7 @@ import schemaFields from "./helpers/schemaFields"
 import controllerName from "./helpers/controllerName";
 import validations from "./helpers/validations";
 import queriesMutationsArguments from "./helpers/queriesMutationsArguments";
+import queryParams from "./helpers/queryParams";
 // helpers
 
 
@@ -15,4 +16,5 @@ module.exports = function (plop) {
 	plop.addHelper('schemaFields',schemaFields);
 	plop.addHelper('validations',validations);
 	plop.addHelper('queriesMutationsArguments', queriesMutationsArguments);
+	plop.addHelper('queryParams', queryParams);
 }
