@@ -5,7 +5,6 @@ const app = Express();
 const {
 	APP__PORT
 } = process.env;
-
 app.use('/graphql', GraphHTTP({
   schema: Schema,
   pretty: true,

@@ -15,6 +15,9 @@ const ForgetPasswordMutations = {
     args: {
       email: {
         type: GraphQLString
+      },
+      returnUrl: {
+        type: GraphQLString
       }
     },
     resolve(_, args) {

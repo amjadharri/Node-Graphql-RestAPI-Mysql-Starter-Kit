@@ -2,11 +2,12 @@
 import DB from "./../../database/database.js";
 import moment from "moment";
 import bcrypt from "bcrypt";
+import mail from "./../../mailer/index"
 
 
 class ForgetPasswordController {
 	async requestPasswordResetToken(_, args) {
-		let {email} = args;
+		let {email, returnUrl} = args;
 		if (email) {
 			let user = await DB.models.user.findOne({
 				where: {
@@ -14,8 +15,15 @@ class ForgetPasswordController {
 				}
 			})
 			if (user) {
+				let token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
+				mail.sendMail({
+					from: 'ilyas.datoo@gmail.com',
+					to: email,
+					subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
+					html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
+				});
 				await DB.models.forgetPassword.create({
-					token: Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2),
+					token: token,
 					userId: user.id,
 					expireDate: `${moment().add('30','minutes').valueOf()}`
 				});
