@@ -5,9 +5,17 @@ import {
 	validate
 } from "./../../framework/validations/index.js";
 
+import mail from "./../../mailer/index";
+import moment from "moment";
+
 import bcrypt from "bcrypt";
 
 import {validations} from "./schema.js";
+
+let {
+	MAILER_SERVICE_USERNAME,
+	APP__APP_NAME
+} = process.env;
 
 class UserController {
 	allUsers(_, args) {
@@ -36,10 +44,17 @@ class UserController {
 			let {id, oldPassword, newPassword} = args;
 			let user = await DB.models.user.findById(id);
 			if (user) {
+				let {email} = user;
 				if (bcrypt.compareSync(oldPassword, user.password)) {
 					await user.updateAttributes({
 						password: bcrypt.hashSync(newPassword, 10),
-					})
+					});
+					mail.sendMail({
+						from: MAILER_SERVICE_USERNAME,
+						to: email,
+						subject: `Your Password is changed for ${APP__APP_NAME}`,
+						html: `We want to let you know that, at ${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')} you have changed your password for ${APP__APP_NAME}.`
+					});
 					return { successMessageType: "Password Changed", successMessage: `Password successfully changed for ${user.email}` };
 				}else {
 					return { errorMessageType: "Incorrect Password", errorMessage: "You have entered incorrect Password" };
