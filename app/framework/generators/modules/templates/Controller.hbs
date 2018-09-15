@@ -6,8 +6,13 @@ class {{controllerName name}}Controller {
 	}
 	async {{controllerName name}}ViewAll(_, args) {
 		try {
+			let argsWhere = {...args};
+			delete argsWhere['page'];
+			delete argsWhere['limit'];
 			return DB.models.{{toLowerCase name}}.findAll({
-				where: args
+				where: argsWhere,
+				limit: args.limit || 20,
+				offset: args.page
 			})
 		} catch (e) {
 			return {

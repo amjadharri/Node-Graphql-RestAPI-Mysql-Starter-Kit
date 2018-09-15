@@ -7,7 +7,7 @@ export default {
 		allowNull: false,
 	},
 	expireDate: {
-		type: Sequelize.DATE,
+		type: Sequelize.STRING,
 		allowNull: false
 	}
 }

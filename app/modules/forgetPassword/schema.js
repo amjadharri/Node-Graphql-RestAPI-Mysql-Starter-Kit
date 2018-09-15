@@ -1,7 +1,7 @@
 import {
 	GraphQLObjectType,
 	GraphQLInt,
-	GraphQString,
+	GraphQLString,
 } from "graphql";
 
 
@@ -44,19 +44,19 @@ export default new GraphQLObjectType({
 				}
 			},
 			userId: {
-				type: GraphQString,
+				type: GraphQLString,
 				resolve(forgetPassword) {
 					return forgetPassword.userId;
 				}
 			},
 			expireDate: {
-				type: GraphQString,
+				type: GraphQLString,
 				resolve(forgetPassword) {
 					return forgetPassword.expireDate;
 				}
 			},
 			token: {
-				type: GraphQString,
+				type: GraphQLString,
 				resolve(forgetPassword) {
 					return forgetPassword.token;
 				}

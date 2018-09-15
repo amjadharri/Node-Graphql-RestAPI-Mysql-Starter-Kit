@@ -5,7 +5,6 @@ import {
 	GraphQLNonNull
 } from "graphql";
 import UserMainSchema from "./schema.js";
-import DB from "./../../database/database.js";
 import UserController from "./Controller.js"
 
 const UserMutations  = {
@@ -38,6 +37,34 @@ const UserMutations  = {
 		},
 		async resolve(_, args) {
 			
+		}
+	},
+	updateProfile: {
+		type: UserMainSchema,
+		args: {
+			name: {type: GraphQLString},
+			gender: {type: GraphQLString},
+			id: { type: new GraphQLNonNull(GraphQLInt)},
+		},
+		resolve(_, args) {
+			return UserController.updateProfile(_, args);
+		}
+	},
+	changePassword: {
+		type: UserMainSchema,
+		args: {
+			id: {
+				type: new GraphQLNonNull(GraphQLInt)
+			},
+			oldPassword: {
+				type: new GraphQLNonNull(GraphQLString)
+			},
+			newPassword: {
+				type: new GraphQLNonNull(GraphQLString)
+			}
+		},
+		resolve(_, args) {
+			return UserController.changePassword(_, args);
 		}
 	}
 }

@@ -18,7 +18,7 @@ class UserController {
 			let user = await DB.models.user.findOne({
 				where: {email: args.email}
 			})
-			if (user) {
+			if (user && bcrypt.compareSync(args.password, user.password)) {
 				user.token = await createJwtToken(user);
 				return user;
 			}else {
@@ -31,10 +31,61 @@ class UserController {
 			}
 		}
 	}
+	async changePassword(_, args) {
+		try {
+			let {id, oldPassword, newPassword} = args;
+			let user = await DB.models.user.findById(id);
+			if (user) {
+				if (bcrypt.compareSync(oldPassword, user.password)) {
+					await user.updateAttributes({
+						password: bcrypt.hashSync(newPassword, 10),
+					})
+					return { successMessageType: "Password Changed", successMessage: `Password successfully changed for ${user.email}` };
+				}else {
+					return { errorMessageType: "Incorrect Password", errorMessage: "You have entered incorrect Password" };
+				}
+			}else {
+				return {
+					errorMessageType: "No User found.",
+					errorMessage: "No user found please try again"
+				}
+			}
+		} catch (e) {
+			return {
+				errorMessageType: "Error from our side",
+				errorMessage: e.message
+			}
+		}
+	}
+	async updateProfile(_, args) {
+		try {
+			let {id, name, gender} = args;
+			let user = await DB.models.user.findById(id);
+			if (user) {
+				await user.updateAttributes({
+					name: name,
+					gender: gender
+				});
+				return {
+					successMessageType: "Profile Updated",
+					successMessage: "Profile updated successfully"
+				}
+			}else {
+				return {
+					errorMessageType: "No User found",
+					errorMessage: "No user found please try again."
+				}
+			}
+		} catch (e) {
+			return {
+				errorMessageType: "Error from our side",
+				errorMessage: e.message
+			}
+		}
+	}
 	async create(_, args) {
 		try {
-
-		let r = await validate(args, validations);
+			let r = await validate(args, validations);
 			if (r) {
 				let user = await DB.models.user.findOne({
 					where: {email: args.email}
