@@ -2,7 +2,6 @@ import Joi from 'joi';
 import {
 	GraphQLObjectType,
 	GraphQLInt,
-	GraphQLList,
 	GraphQLString,
 } from "graphql";
 
@@ -25,7 +24,6 @@ const UserMainSchema = new GraphQLObjectType({
 					return user.errorMessage || '';
 				}
 			},
-			
 			successMessage: {
 				type: GraphQLString,
 				resolve(model) {

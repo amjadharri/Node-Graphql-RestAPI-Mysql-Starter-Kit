@@ -5,8 +5,6 @@ Version: 0.1
 
 Built by JavaScript Developers at Uconnect Private Limited!
 
-
-
 ## Starter Kit Features
 
 <dl>

@@ -1,21 +1,12 @@
-
-import DB from "./../../database/database.js";
-import {createJwtToken} from "./../../framework/validations/index.js";
-import {
-	validate
-} from "./../../framework/validations/index.js";
-
-import mail from "./../../mailer/index";
 import moment from "moment";
-
 import bcrypt from "bcrypt";
 
-import {validations} from "./schema.js";
-
-let {
-	MAILER_SERVICE_USERNAME,
-	APP__APP_NAME
-} = process.env;
+import DB from "./../../database/database.js";
+import { createJwtToken } from "./../../framework/validations/index.js";
+import { validate } from "./../../framework/validations/index.js";
+import mail from "./../../mailer/index";
+import { validations } from "./schema.js";
+let { MAILER_SERVICE_USERNAME, APP__APP_NAME } = process.env;
 
 class UserController {
 	allUsers(_, args) {

@@ -1,10 +1,8 @@
-
-import DB from "./../../database/database.js";
 import moment from "moment";
 import bcrypt from "bcrypt";
+
+import DB from "./../../database/database.js";
 import mail from "./../../mailer/index"
-
-
 class ForgetPasswordController {
 	async requestPasswordResetToken(_, args) {
 		let {email, returnUrl} = args;
@@ -95,6 +93,5 @@ class ForgetPasswordController {
 		}
 	}
 }
-
 
 export default new ForgetPasswordController

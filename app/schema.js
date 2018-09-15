@@ -1,13 +1,6 @@
-import {
-	GraphQLList,
-	GraphQLInt,
-	GraphQLString,
-	GraphQLObjectType,
-	GraphQLSchema
-} from "graphql";
+import {GraphQLSchema} from "graphql";
 
 import DB from "./database/database.js";
-
 import Queries from "./queries.js";
 import Mutations from "./mutations.js";
 

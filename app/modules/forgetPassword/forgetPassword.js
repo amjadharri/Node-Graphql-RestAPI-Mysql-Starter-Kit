@@ -1,6 +1,5 @@
 import Sequelize from "sequelize";
 
-
 export default {
 	token: {
 		type: Sequelize.STRING,
