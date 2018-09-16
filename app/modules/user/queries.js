@@ -4,7 +4,7 @@ import {
 	GraphQLString
 } from "graphql";
 import UserMainSchema from "./schema.js";
-import UserController from "./Controller.js"
+import UserController from "./Controller.js";
 
 const UserQueries = {
 	user: {

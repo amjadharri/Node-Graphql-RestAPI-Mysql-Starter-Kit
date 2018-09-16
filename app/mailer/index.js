@@ -1,7 +1,5 @@
 let nodemailer = require('nodemailer');
 
-
-
 const {
   MAILER_SERVICE,
   MAILER_SERVICE_USERNAME,
