@@ -2,7 +2,7 @@ import {
 	GraphQLObjectType
 } from 'graphql';
 
-import UserQueries from "./modules/user/Queries.js";
+import UserQueries from "./modules/User/Queries.js";
 
 const Queries = new GraphQLObjectType({
 	name: "Query",
