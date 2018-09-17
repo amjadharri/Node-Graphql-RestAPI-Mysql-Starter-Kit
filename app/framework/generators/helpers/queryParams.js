@@ -1,11 +1,10 @@
+import { getTableFieldsInArray, splitFieldAndType } from "./schemaFields";
 import { renderGraphqlType } from "./schemaFields.js";
 export default function (value) {
-  let array = value.split(",");
+  let array = getTableFieldsInArray(value);
   let output = "";
   array.map((e) => {
-    let split = e.split(":");
-    let columnName = split[0];
-    let columnType = split[1].toLowerCase();
+    let {columnName, columnType} = splitFieldAndType(e);
     output = output + `
 
   ${columnName}: {

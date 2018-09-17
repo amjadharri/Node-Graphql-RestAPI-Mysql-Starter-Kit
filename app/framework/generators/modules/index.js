@@ -23,23 +23,17 @@ module.exports = {
         {
             type: 'input',
             name: 'tableFields',
-            message: `Please enter the table fields: (lowercase). 
+            message: `Please enter the table fields with space provided: (lowercase). 
 Supported types are: 
     STRING, BOOLEAN, TEXT,  JSON,    JSONB,  GEOMETRY, DATE, 
     ARRAY(PostgreSQL ONLY), DECIMAL, DOUBLE, INTEGER
-Example: name:string, age: integer
+Example: name:string age: integer
 `,
-        },
-        {
-            type: 'confirm',
-            name: 'wantSeeds',
-            default: false,
-            message: 'Do you want to add seeds? yes/no or y/n (lowercase)'
         }
     ],
     actions: (data) => {
         let actions = [];
-        if (data.name && data.table && data.tableFields && data.wantSeeds) {
+        if (data.name && data.table && data.tableFields) {
             if (data.name) {
                 actions.push({
                     type: 'add',
@@ -74,7 +68,7 @@ Example: name:string, age: integer
             }
             if (folderExists(data.name)) {
                 console.log("Folder already exists. Sorry please try again.");
-                return [];
+                return new Array();
             }
             generateFolder(controllerName(data.name));
             return actions;

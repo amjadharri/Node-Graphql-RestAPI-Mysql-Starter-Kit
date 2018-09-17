@@ -1,14 +1,13 @@
+import { getTableFieldsInArray, splitFieldAndType } from "./schemaFields";
 export default function (name) {
   let supportedTypes = ['STRING', 'BOOLEAN', 'TEXT', 'JSON', 'JSONB', 'GEOMETRY', 'DATE',
     'ARRAY', 'DECIMAL', 'DOUBLE', 'INTEGER'];
-  let array = name.split(",");
+  let array = getTableFieldsInArray(name);
   let output = "";
   array.map((a) => {
-
-    let split = a.split(":");
-    let columnName = split[0];
-    let columnType = split[1].toUpperCase();
-    if (supportedTypes.indexOf(columnType) > -1) {
+    let { columnName, columnType } = splitFieldAndType(a);
+    console.log(columnName, columnType, name);
+    if (supportedTypes.indexOf(columnType.toUpperCase()) > -1) {
       output = output + `
 	${columnName}: {
 		type: Sequelize.${columnType},

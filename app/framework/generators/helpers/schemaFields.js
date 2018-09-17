@@ -11,13 +11,23 @@ export function renderGraphqlType(columnType) {
   }
 }
 
+export function getTableFieldsInArray(value) {
+  return value.split(" ");
+}
+
+export function splitFieldAndType(value) {
+  let split = value.split(":");
+  return {
+    columnName: split[0].toLowerCase(),
+    columnType: split[1].toLowerCase()
+  }
+}
+
 export default function (value) {
-  let array = value.split(",");
+  let array = getTableFieldsInArray(value);
   let output = "";
   array.map((e) => {
-    let split = e.split(":");
-    let columnName = split[0];
-    let columnType = split[1].toLowerCase();
+    let {columnName, columnType} = splitFieldAndType(e);
     output = output + `
 			${columnName}: {
 				type: ${renderGraphqlType(columnType)},
