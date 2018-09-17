@@ -4,47 +4,54 @@ import bcrypt from "bcrypt";
 import DB from "./../../database/database.js";
 import mail from "./../../mailer/index"
 class ForgetPasswordController {
-	async requestPasswordResetToken(_, args) {
-		let {email, returnUrl} = args;
-		if (email) {
-			let user = await DB.models.user.findOne({
-				where: {
-					email: email
-				}
-			})
-			if (user) {
-				let token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
-				mail.sendMail({
-					from: 'ilyas.datoo@gmail.com',
-					to: email,
-					subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
-					html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
-				});
-				await DB.models.forgetPassword.create({
-					token: token,
-					userId: user.id,
-					expireDate: `${moment().add('30','minutes').valueOf()}`
-				});
-				return {
-					successMessageType: "Successfull",
-					successMessage:  "Please check your email. We have sent a link to reset your email"
+	async requestPasswordResetToken(req, res) {
+		try {
+			let {body: {email, returnUrl}} = req;
+			if (email && returnUrl) {
+				let user = await DB.models.user.findOne({
+					where: {
+						email: email
+					}
+				})
+				if (user) {
+					let token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
+					mail.sendMail({
+						from: 'ilyas.datoo@gmail.com',
+						to: email,
+						subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
+						html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
+					});
+					await DB.models.forgetPassword.create({
+						token: token,
+						userId: user.id,
+						expireDate: `${moment().add('30','minutes').valueOf()}`
+					});
+					res.json({
+						successMessageType: "Successfull",
+						successMessage:  "Please check your email. We have sent a link to reset your email"
+					});
+				}else {
+					res.json({
+						errorMessage: "No User found",
+						errorMessageType: "No user found with that email"
+					});
 				}
 			}else {
-				return {
-					errorMessage: "No User found",
-					errorMessageType: "No user found with that email"
-				}
+				res.json({
+					errorMessage: "Email and Return Url not provided",
+					errorMessageType: "Please provide your Email and Return Url"
+				});
 			}
-		}else {
-			return {
-				errorMessage: "Email not provided",
-				errorMessageType: "Please provide your email"
-			}
+		} catch (e) {
+			res.json({
+				errorMessageType: "Error from our side",
+				errorMessage: e.message
+			});
 		}
 	}
-	async resetPassword(_,args) {
+	async resetPassword(req, res) {
 		try {
-			let {token, email, password} = args;
+			let {body: { token, email, password } } = req;
 			if (token && email && password) {
 				let forgetPasswordItem = await DB.models.forgetPassword.findOne({
 					where: {
@@ -66,30 +73,34 @@ class ForgetPasswordController {
 								token: token 
 							}
 						});
-						return { successMessageType: "Password Changed", successMessage: `Password successfully changed for ${user.email}` };
+						res.json({
+							successMessageType: "Password Changed", 
+							successMessage: `Password successfully changed for ${user.email}` 
+						})
 					}else {
-						return {
+						res.json({
 							errorMessageType: "User Not Found",
 							errorMessage: "User not found to update password."
-						}
+						})
 					}
 				}else {
-					return {
+					res.json({
 						errorMessageType: "Token Mismatched",
 						errorMessage: "The token you provided is mismatched or expired."
-					}
+					})
 				}
 			}else {
-				return {
+			
+				res.json({
 					errorMessageType: "Details not provided",
 					errorMessage: "Please provide Token, Email and/or Password"
-				}
+				})
 			}
 		} catch (e) {
-			return {
+			res.json({
 				errorMessageType: "Something went wrong",
 				errorMessage: "Something went wrong from our side. Message: " + e.message,
-			}
+			})
 		}
 	}
 }

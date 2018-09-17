@@ -9,6 +9,76 @@ import { validations } from "./schema.js";
 let { MAILER_SERVICE_USERNAME, APP__APP_NAME } = process.env;
 
 class UserController {
+
+	// api requests start
+
+
+	async signup(req, res) {
+		try {
+			let { body: {username, email, password} } = req;
+			let r = await validate(req.body, validations);
+			if (r) {
+				let user = await DB.models.user.findOne({
+					where: { email: email }
+				});
+				if (user) {
+					res.json({
+						errorMessageType: "Already Registered",
+						errorMessage: `${email} is already is Registered`
+					});
+				}
+				let newUser = await DB.models.user.create({
+					email: email,
+					username: username,
+					password: bcrypt.hashSync(password, 10)
+				});
+				newUser.token = await createJwtToken(newUser);
+				res.json(newUser);
+			} else {
+				res.json({
+					errorMessageType: "Missing details ",
+					errorMessage: "You have form issues please check your form."
+				})
+			}
+		} catch (e) {
+			res.json({
+				errorMessageType: "Error from our side",
+				errorMessage: e.message
+			})
+		}
+	}
+	async login(req, res) {
+		try {
+			let { body: { email, password } } = req;
+			if (email && password) {
+				let user = await DB.models.user.findOne({
+					where: {email: email}
+				})
+				if (user && bcrypt.compareSync(password, user.password)) {
+					user.token = await createJwtToken(user);
+					res.json(user)
+				}else {
+					res.json({
+						errorMessageType: "Incorrect Password And/Or Email", 
+						errorMessage: "You have entered incorrect Password And/Or Email"
+					})
+				}
+			}else {
+				res.json({
+					errorMessageType: "Missing details",
+					errorMessage: "Please enter your Email & Password"
+				})
+			}
+		} catch (e) {
+			res.json({
+				errorMessageType: "Error from our side",
+				errorMessage: e.message
+			})
+		}
+	}
+
+	// api requests end
+
 	async userView(_, args) {
 		try {
 			return await DB.models.user.findById(args.id);
@@ -19,24 +89,7 @@ class UserController {
 			}
 		}
 	}
-	async login(_, args) {
-		if (args.email && args.password) {
-			let user = await DB.models.user.findOne({
-				where: {email: args.email}
-			})
-			if (user && bcrypt.compareSync(args.password, user.password)) {
-				user.token = await createJwtToken(user);
-				return user;
-			}else {
-				return { errorMessageType: "Incorrect Password And/Or Email", errorMessage: "You have entered incorrect Password And/Or Email"};
-			}
-		}else {
-			return {
-				errorMessageType: "Missing details",
-				errorMessage: "Please enter your Email & Password"
-			}
-		}
-	}
+
 	async changePassword(_, args) {
 		try {
 			let {id, oldPassword, newPassword} = args;
@@ -87,39 +140,6 @@ class UserController {
 				return {
 					errorMessageType: "No User found",
 					errorMessage: "No user found please try again."
-				}
-			}
-		} catch (e) {
-			return {
-				errorMessageType: "Error from our side",
-				errorMessage: e.message
-			}
-		}
-	}
-	async create(_, args) {
-		try {
-			let r = await validate(args, validations);
-			if (r) {
-				let user = await DB.models.user.findOne({
-					where: {email: args.email}
-				});
-				if (user) {
-					return {
-						errorMessageType: "Already Registered",
-						errorMessage: `${args.email} is already is Registered`
-					}
-				}
-				let newUser =  await DB.models.user.create({
-					email: args.email,
-					username: args.username,
-					password: bcrypt.hashSync(args.password, 10)
-				});
-				newUser.token = await createJwtToken(newUser);
-				return newUser;
-			}else {
-				return {
-					errorMessageType: "Missing details ",
-					errorMessage: "You have form issues please check your form."
 				}
 			}
 		} catch (e) {

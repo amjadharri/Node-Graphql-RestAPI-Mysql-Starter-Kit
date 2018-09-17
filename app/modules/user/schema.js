@@ -8,7 +8,6 @@ import {
 import DB from "./../../database/database.js";
 
 export let validations = Joi.object().keys({
-	username: Joi.string().min(5).max(30).required(),
 	email: Joi.string().email().required(),
 	password: Joi.string().min(5).max(30).required()
 });

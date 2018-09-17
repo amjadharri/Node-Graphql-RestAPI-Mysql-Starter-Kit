@@ -3,7 +3,7 @@ import Sequelize from "sequelize";
 export default {
 	username: {
 		type: Sequelize.STRING,
-		allowNull: false,
+		allowNull: true,
 	},
 	token: {
 		type: Sequelize.STRING,
