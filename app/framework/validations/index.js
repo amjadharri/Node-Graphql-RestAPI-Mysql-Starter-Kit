@@ -16,29 +16,29 @@ export async function validate(data, schema) {
 	}
 }
 
-export async function isAccessTokenValid(req, res, next) {
-	let authorization = req.headers.authorization || "...";
-	if (authorization == "...") {
-		res.json({
-			status: false,
-			message: "Please provide authorization token"
-		});
-		return false;
-	}
-	authorization = authorization.split(" ")[1];
-	authorization = authorization.replace("'", "");
-	authorization = authorization.replace("'", "");
-	var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
-	if (decoded.hasOwnProperty('validateFor')) {
-		next();
-		return true;
-	}else {
-		res.json({
-			status: false,
-			message: "Permission denied. Please check your authorization token"
-		})
-		return false;
-	}
+export async function validateAccessToken(req, res, next) {
+	// let authorization = req.headers.authorization || "...";
+	// if (authorization == "...") {
+	// 	res.json({
+	// 		status: false,
+	// 		message: "Please provide authorization token"
+	// 	});
+	// 	return false;
+	// }
+	// authorization = authorization.split(" ")[1];
+	// authorization = authorization.replace("'", "");
+	// authorization = authorization.replace("'", "");
+	// var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
+	// if (decoded.hasOwnProperty('validateFor')) {
+	// 	next();
+	// 	return true;
+	// }else {
+	// 	res.json({
+	// 		status: false,
+	// 		message: "Permission denied. Please check your authorization token"
+	// 	})
+	// 	return false;
+	// }
 }
 
 // create jwt token for user.

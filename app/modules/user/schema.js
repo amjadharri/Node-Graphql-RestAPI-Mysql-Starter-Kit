@@ -66,6 +66,12 @@ const UserMainSchema = new GraphQLObjectType({
 					return user.email;
 				}
 			},
+			gender: {
+				type: GraphQLString,
+				resolve(user) {
+					return user.gender;
+				}
+			},
 			createdAt: {
 				type: GraphQLString,
 				resolve(user) {

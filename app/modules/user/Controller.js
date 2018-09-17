@@ -9,8 +9,15 @@ import { validations } from "./schema.js";
 let { MAILER_SERVICE_USERNAME, APP__APP_NAME } = process.env;
 
 class UserController {
-	allUsers(_, args) {
-		return DB.models.user.findAll({where: args})
+	async userView(_, args) {
+		try {
+			return await DB.models.user.findById(args.id);
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
 	}
 	async login(_, args) {
 		if (args.email && args.password) {

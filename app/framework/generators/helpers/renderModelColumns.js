@@ -10,7 +10,7 @@ export default function (name) {
     if (supportedTypes.indexOf(columnType.toUpperCase()) > -1) {
       output = output + `
 	${columnName}: {
-		type: Sequelize.${columnType},
+		type: Sequelize.${columnType.toUpperCase()},
 		allowNull: false,
 	},
 				`;

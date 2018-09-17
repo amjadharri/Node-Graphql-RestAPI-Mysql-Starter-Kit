@@ -2,8 +2,7 @@ import {
 	GraphQLObjectType
 } from 'graphql';
 
-import UserMutations from "./modules/user/mutations.js"
-import ForgetPasswordMutations from "./modules/forgetPassword/mutations.js"
+import UserMutations from "./modules/user/Mutations.js"
 
 const Mutations = new GraphQLObjectType({
 	name: 'Mutations',
@@ -11,7 +10,6 @@ const Mutations = new GraphQLObjectType({
 	fields() {
 		return {
 			...UserMutations,
-			...ForgetPasswordMutations,
 		}
 	}
 })

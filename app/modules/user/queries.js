@@ -8,40 +8,31 @@ import UserController from "./Controller.js";
 
 const UserQueries = {
 	user: {
-		type: new GraphQLList(UserMainSchema),
+		type: UserMainSchema,
 		args: {
 			id: {
 				type: GraphQLInt
 			},	
 			email: {
 				type: GraphQLString
-			}
-		},
-		resolve(root, args) {
-			return UserController.allUsers(root, args);
-		}
-	},
-	login: {
-		type: UserMainSchema,
-		args: {
+			},
+			gender: {
+				type: GraphQLString
+			},
+			name: {
+				type: GraphQLString
+			},
 			email: {
 				type: GraphQLString
 			},
-			password: {
+			username: {
 				type: GraphQLString
-			},
-		},
-		resolve(_, args) {
-			try {
-				return UserController.login(_,args);
-			} catch (e) {
-				return {
-					errorMessageType: "Something went wrong while login",
-					errorMessage: `${e.message}`
-				}
 			}
+		},
+		resolve(root, args) {
+			return UserController.userView(root, args);
 		}
-	}
+	},
 }
 
 export default UserQueries

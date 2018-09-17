@@ -2,8 +2,8 @@ import Sequelize from "sequelize";
 import seeds from "./../seeds.js";
 import makeRelations from "./relations.js";
 
-import user from "./../modules/user/user"
-import forgetPassword from "./../modules/forgetPassword/forgetPassword";
+import user from "../modules/user/User.js"
+import forgetPassword from "../modules/forgetPassword/ForgetPassword.js";
 
 
 

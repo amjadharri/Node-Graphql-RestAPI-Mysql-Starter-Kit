@@ -1,4 +1,5 @@
 import DB from "./../../database/database.js";
+import {validateAccessToken} from `${__dirname}/app/framework/validation/index.js`
 
 class {{controllerName name}}Controller {
 	constructor() {
@@ -6,6 +7,7 @@ class {{controllerName name}}Controller {
 	}
 	async {{controllerName name}}ViewAll(_, args) {
 		try {
+			await validateAccessToken();
 			let argsWhere = {...args};
 			delete argsWhere['page'];
 			delete argsWhere['limit'];
@@ -25,6 +27,7 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Create(_, args) {
 		try {
+			await validateAccessToken();
 			try {
 				return DB.models.{{toLowerCase name}}.create(args);
 			}catch (e) {
@@ -43,6 +46,7 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Update(_, args) {
 		try {
+			await validateAccessToken();
 			let a = await DB.models.{{toLowerCase name}}.findById(args.id);
 			if (a) {
 				await a.updateAttributes(args);
@@ -64,6 +68,7 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Delete(_, args) {
 		try {
+			await validateAccessToken();
 			await DB.models.{{toLowerCase name}}.destroy({
 				where: {
 					id: args.id
@@ -83,6 +88,7 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}View(_, args) {
 		try {
+			await validateAccessToken();
 			return await DB.models.{{ toLowerCase name }}.findById(args.id);
 		} catch (e) {
 			return {
