@@ -13,19 +13,19 @@ class UserController {
 	// api requests start
 
 
-	async signup(req, res) {
+	async signup(_, args) {
 		try {
-			let { body: {username, email, password} } = req;
-			let r = await validate(req.body, validations);
+			let { username, email, password } = args;
+			let r = await validate(args, validations);
 			if (r) {
 				let user = await DB.models.user.findOne({
 					where: { email: email }
 				});
 				if (user) {
-					res.json({
+					return {
 						errorMessageType: "Already Registered",
 						errorMessage: `${email} is already is Registered`
-					});
+					}
 				}
 				let newUser = await DB.models.user.create({
 					email: email,
@@ -33,47 +33,47 @@ class UserController {
 					password: bcrypt.hashSync(password, 10)
 				});
 				newUser.token = await createJwtToken(newUser);
-				res.json(newUser);
+				return newUser;
 			} else {
-				res.json({
+				return {
 					errorMessageType: "Missing details ",
 					errorMessage: "You have form issues please check your form."
-				})
+				}
 			}
 		} catch (e) {
-			res.json({
+			return {
 				errorMessageType: "Error from our side",
 				errorMessage: e.message
-			})
+			}
 		}
 	}
-	async login(req, res) {
+	async login(_, args) {
 		try {
-			let { body: { email, password } } = req;
+			let { email, password } = args;
 			if (email && password) {
 				let user = await DB.models.user.findOne({
 					where: {email: email}
 				})
 				if (user && bcrypt.compareSync(password, user.password)) {
 					user.token = await createJwtToken(user);
-					res.json(user)
+					return user
 				}else {
-					res.json({
+					return {
 						errorMessageType: "Incorrect Password And/Or Email", 
 						errorMessage: "You have entered incorrect Password And/Or Email"
-					})
+					}
 				}
 			}else {
-				res.json({
+				return {
 					errorMessageType: "Missing details",
 					errorMessage: "Please enter your Email & Password"
-				})
+				}
 			}
 		} catch (e) {
-			res.json({
+			return {
 				errorMessageType: "Error from our side",
 				errorMessage: e.message
-			})
+			}
 		}
 	}
 

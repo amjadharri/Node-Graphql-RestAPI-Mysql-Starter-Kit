@@ -3,6 +3,7 @@ import {
 } from 'graphql';
 
 import UserQueries from "./modules/User/Queries.js";
+import ForgetPasswordQueries from "./modules/ForgetPassword/Queries.js";
 
 const Queries = new GraphQLObjectType({
 	name: "Query",
@@ -10,6 +11,7 @@ const Queries = new GraphQLObjectType({
 	fields() {
 		return {
 			...UserQueries,
+			...ForgetPasswordQueries,
 		}
 	}
 });

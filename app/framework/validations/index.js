@@ -17,28 +17,36 @@ export async function validate(data, schema) {
 }
 
 export async function validateAccessToken(req, res, next) {
-	// let authorization = req.headers.authorization || "...";
-	// if (authorization == "...") {
-	// 	res.json({
-	// 		status: false,
-	// 		message: "Please provide authorization token"
-	// 	});
-	// 	return false;
-	// }
-	// authorization = authorization.split(" ")[1];
-	// authorization = authorization.replace("'", "");
-	// authorization = authorization.replace("'", "");
-	// var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
-	// if (decoded.hasOwnProperty('validateFor')) {
-	// 	next();
-	// 	return true;
-	// }else {
-	// 	res.json({
-	// 		status: false,
-	// 		message: "Permission denied. Please check your authorization token"
-	// 	})
-	// 	return false;
-	// }
+	let {body: {query}} = req;
+	let split = query.split("\n")[1];
+	let auth = ["signup","resetPassword","requestPasswordResetToken"];
+	let isAuth = split.indexOf('login') > -1 ||  split.indexOf('signup') > -1 ||   split.indexOf('resetPassword') > -1 ||  split.indexOf('requestPasswordResetToken') > -1;
+	if (isAuth) {
+		next();
+	}else {
+		let authorization = req.headers.authorization || "...";
+		if (authorization == "...") {
+			res.json({
+				status: false,
+				message: "Please provide authorization token"
+			});
+			return false;
+		}
+		authorization = authorization.split(" ")[1];
+		authorization = authorization.replace("'", "");
+		authorization = authorization.replace("'", "");
+		var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
+		if (decoded.hasOwnProperty('validateFor')) {
+			next();
+			return true;
+		}else {
+			res.json({
+				status: false,
+				message: "Permission denied. Please check your authorization token"
+			})
+			return false;
+		}
+	}
 }
 
 // create jwt token for user.
@@ -65,3 +73,4 @@ export async function createAccessToken(data) {
 		expiresIn: moment().add('1', 'days').seconds()
 	});
 }
+

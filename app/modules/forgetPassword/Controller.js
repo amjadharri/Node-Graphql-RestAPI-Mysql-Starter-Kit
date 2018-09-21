@@ -4,9 +4,9 @@ import bcrypt from "bcrypt";
 import DB from "./../../database/database.js";
 import mail from "./../../mailer/index"
 class ForgetPasswordController {
-	async requestPasswordResetToken(req, res) {
+	async requestPasswordResetToken(_, args) {
 		try {
-			let {body: {email, returnUrl}} = req;
+			let {email, returnUrl} = args;
 			if (email && returnUrl) {
 				let user = await DB.models.user.findOne({
 					where: {
@@ -15,43 +15,43 @@ class ForgetPasswordController {
 				})
 				if (user) {
 					let token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
-					mail.sendMail({
-						from: 'ilyas.datoo@gmail.com',
-						to: email,
-						subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
-						html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
-					});
+					// mail.sendMail({
+					// 	from: 'ilyas.datoo@gmail.com',
+					// 	to: email,
+					// 	subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
+					// 	html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
+					// });
 					await DB.models.forgetPassword.create({
 						token: token,
 						userId: user.id,
 						expireDate: `${moment().add('30','minutes').valueOf()}`
 					});
-					res.json({
+					return {
 						successMessageType: "Successfull",
 						successMessage:  "Please check your email. We have sent a link to reset your email"
-					});
+					};
 				}else {
-					res.json({
+					return {
 						errorMessage: "No User found",
 						errorMessageType: "No user found with that email"
-					});
+					};
 				}
 			}else {
-				res.json({
+				return {
 					errorMessage: "Email and Return Url not provided",
 					errorMessageType: "Please provide your Email and Return Url"
-				});
+				};
 			}
 		} catch (e) {
-			res.json({
+			return {
 				errorMessageType: "Error from our side",
 				errorMessage: e.message
-			});
+			};
 		}
 	}
-	async resetPassword(req, res) {
+	async resetPassword(_, args) {
 		try {
-			let {body: { token, email, password } } = req;
+			let { token, email, password } = args;
 			if (token && email && password) {
 				let forgetPasswordItem = await DB.models.forgetPassword.findOne({
 					where: {
@@ -73,34 +73,34 @@ class ForgetPasswordController {
 								token: token 
 							}
 						});
-						res.json({
+						return {
 							successMessageType: "Password Changed", 
 							successMessage: `Password successfully changed for ${user.email}` 
-						})
+						}
 					}else {
-						res.json({
+						return {
 							errorMessageType: "User Not Found",
 							errorMessage: "User not found to update password."
-						})
+						}
 					}
 				}else {
-					res.json({
+					return {
 						errorMessageType: "Token Mismatched",
 						errorMessage: "The token you provided is mismatched or expired."
-					})
+					}
 				}
 			}else {
 			
-				res.json({
+				return {
 					errorMessageType: "Details not provided",
 					errorMessage: "Please provide Token, Email and/or Password"
-				})
+				}
 			}
 		} catch (e) {
-			res.json({
+			return {
 				errorMessageType: "Something went wrong",
 				errorMessage: "Something went wrong from our side. Message: " + e.message,
-			})
+			}
 		}
 	}
 }
