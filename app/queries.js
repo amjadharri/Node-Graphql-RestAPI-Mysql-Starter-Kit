@@ -5,6 +5,8 @@ import {
 import UserQueries from "./modules/User/Queries.js";
 import ForgetPasswordQueries from "./modules/ForgetPassword/Queries.js";
 
+import {queries} from "./customQueriesMutations";
+
 const Queries = new GraphQLObjectType({
 	name: "Query",
 	description: "Root query object",
@@ -12,6 +14,7 @@ const Queries = new GraphQLObjectType({
 		return {
 			...UserQueries,
 			...ForgetPasswordQueries,
+			...queries
 		}
 	}
 });

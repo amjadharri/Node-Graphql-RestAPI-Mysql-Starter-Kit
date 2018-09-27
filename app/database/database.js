@@ -25,11 +25,10 @@ const DB = new Sequelize(APP__DB_NAME,APP__DB_USERNAME,APP__DB_PASSWORD,{
 const UserModel = DB.define('user',user);
 const ForgetPasswordModel = DB.define('forgetPassword',forgetPassword);
 
-// Relations
-UserModel.hasMany(ForgetPasswordModel);
-ForgetPasswordModel.belongsTo(UserModel);
-
-makeRelations();
+makeRelations({
+	UserModel,
+	ForgetPasswordModel
+});
 
 
 DB.sync({

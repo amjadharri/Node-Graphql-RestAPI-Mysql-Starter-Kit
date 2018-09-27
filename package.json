@@ -25,6 +25,7 @@
     "faker": "^3.0.1",
     "graphql": "^0.4.16",
     "graphql-relay": "^0.3.6",
+    "handlebars": "^4.0.12",
     "joi": "^13.6.0",
     "jsonwebtoken": "^8.3.0",
     "lodash": "^4.2.1",

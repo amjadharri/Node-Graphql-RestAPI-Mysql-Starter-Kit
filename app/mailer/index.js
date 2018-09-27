@@ -1,4 +1,6 @@
 let nodemailer = require('nodemailer');
+import handlebars from "handlebars";
+import fs from "fs";
 
 const {
   MAILER_SERVICE,
@@ -14,4 +16,18 @@ let transporter = nodemailer.createTransport({
   }
 });
 
+
+export function sendEmail(templateFile, variables, credentials) {
+	let template = fs.readFileSync('app/mailer/templates/'+templateFile,'utf-8');
+	let compiled = handlebars.compile(template);
+	let resultTemplate = compiled(variables);
+	transporter.sendMail({
+		from : credentials.from,
+		to: credentials.to,
+		html: resultTemplate,
+		subject: credentials.subject
+	})
+}
+
 export default transporter;
+

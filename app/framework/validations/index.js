@@ -18,6 +18,13 @@ export async function validate(data, schema) {
 
 export async function validateAccessToken(req, res, next) {
 	let {body: {query}} = req;
+	if (!query) {
+		res.json({
+			status: false,
+			message: "Query was not passed"
+		});
+		return false;
+	}
 	let split = query.split("\n")[1];
 	let auth = ["signup","resetPassword","requestPasswordResetToken"];
 	let isAuth = split.indexOf('login') > -1 ||  split.indexOf('signup') > -1 ||   split.indexOf('resetPassword') > -1 ||  split.indexOf('requestPasswordResetToken') > -1;

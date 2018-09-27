@@ -5,6 +5,10 @@ import {
 import UserMutations from "./modules/User/Mutations.js";
 import ForgetPasswordMutations from "./modules/ForgetPassword/Mutations.js";
 
+
+import {mutations} from "./customQueriesMutations";
+
+
 const Mutations = new GraphQLObjectType({
 	name: 'Mutations',
 	description: 'All mutations',
@@ -12,6 +16,7 @@ const Mutations = new GraphQLObjectType({
 		return {
 			...UserMutations,
 			...ForgetPasswordMutations,
+			...mutations
 		}
 	}
 })

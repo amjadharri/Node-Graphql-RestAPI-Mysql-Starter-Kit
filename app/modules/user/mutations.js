@@ -8,6 +8,16 @@ import UserMainSchema from "./schema.js";
 import UserController from "./Controller.js"
 
 const UserMutations  = {
+	refreshToken: {
+		type: UserMainSchema,
+		args: {
+			email: {type: GraphQLString},
+			token: {type: GraphQLString}
+		},
+		resolve(_, args) {
+			return UserController.refreshToken();
+		}
+	},
 	updateProfile: {
 		type: UserMainSchema,
 		args: {

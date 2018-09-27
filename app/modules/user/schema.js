@@ -71,6 +71,22 @@ const UserMainSchema = new GraphQLObjectType({
 					return user.gender;
 				}
 			},
+			referer: {
+				type: GraphQLString,
+				resolve(user) {
+					return user.referer;
+				}
+			},
+			isSocial: {
+				type: GraphQLString,
+				resolve(user) {
+					if (user.referer) {
+						return true;
+					}else {
+						return false;
+					}
+				}
+			},
 			createdAt: {
 				type: GraphQLString,
 				resolve(user) {

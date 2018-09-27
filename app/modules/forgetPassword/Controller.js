@@ -1,5 +1,8 @@
 import moment from "moment";
 import bcrypt from "bcrypt";
+import handlebars from "handlebars";
+import fs from "fs";
+import {sendEmail} from "./../../mailer/index.js"
 
 import DB from "./../../database/database.js";
 import mail from "./../../mailer/index"
@@ -15,12 +18,14 @@ class ForgetPasswordController {
 				})
 				if (user) {
 					let token = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2)
-					// mail.sendMail({
-					// 	from: 'ilyas.datoo@gmail.com',
-					// 	to: email,
-					// 	subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
-					// 	html: `You can reset your password <a href="${returnUrl}?token=${token}" >Here</a>. This email is valid for next 30 minutes until ${moment().add('30', 'minutes').format('dddd, MMMM Do YYYY, h:mm:ss a')}`
-					// });
+					sendEmail('requestPasswordResetToken.hbs',{
+						email: email,
+						nextMinutes:  `${moment().add('30','minutes').format("dddd, MMMM Do YYYY, h:mm:ss a")}`
+					},{
+						from: 'ilyas.datoo@gmail.com',
+						to: email,
+						subject: `Reset your account password for ${process.env.APP__APP_NAME}`,
+					});
 					await DB.models.forgetPassword.create({
 						token: token,
 						userId: user.id,

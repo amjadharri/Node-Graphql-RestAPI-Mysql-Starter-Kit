@@ -27,5 +27,9 @@ export default {
 	gender: {
 		type: Sequelize.STRING,
 		allowNull: true
-	}
+	},
+	referer: {
+		type: Sequelize.STRING,
+		allowNull: true
+	},
 }

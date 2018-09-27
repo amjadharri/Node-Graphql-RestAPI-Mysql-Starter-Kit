@@ -6,11 +6,12 @@ import { createJwtToken } from "./../../framework/validations/index.js";
 import { validate } from "./../../framework/validations/index.js";
 import mail from "./../../mailer/index";
 import { validations } from "./schema.js";
+import {sendEmail} from "./../../mailer/index.js"
 let { MAILER_SERVICE_USERNAME, APP__APP_NAME } = process.env;
 
 class UserController {
 
-	// api requests start
+
 
 
 	async signup(_, args) {
@@ -77,7 +78,31 @@ class UserController {
 		}
 	}
 
-	// api requests end
+
+	async refreshToken(_, args) {
+		try {
+			let {email,token} = args;
+			let user = await DB.models.user.findOne({
+				where: {email: email,token: token}
+			});
+			if (!user) {
+				return {
+					errorMessageType: "No user found",
+					errorMessage: "No user found with that token",
+				}
+			}
+			token = await createJwtToken(user);
+			await user.updateAttributes({
+				token: token,
+			});
+			return user;
+		} catch (e) {
+			return {
+				errorMessageType: 'Backend Error',
+				errorMessage: `Something went wrong, ${e.message}`
+			}
+		}
+	}
 
 	async userView(_, args) {
 		try {
