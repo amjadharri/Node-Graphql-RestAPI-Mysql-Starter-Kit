@@ -1,6 +1,7 @@
 import Joi from "joi";
 import jwt from "jsonwebtoken";
 import moment from "moment";
+import gql from 'graphql-tag';
 
 export async function validate(data, schema) {
 	try {
@@ -17,41 +18,54 @@ export async function validate(data, schema) {
 }
 
 export async function validateAccessToken(req, res, next) {
+	let method = req.method.toLowerCase();
 	let {body: {query}} = req;
-	if (!query) {
-		res.json({
-			status: false,
-			message: "Query was not passed"
-		});
-		return false;
-	}
-	let split = query.split("\n")[1];
-	let auth = ["signup","resetPassword","requestPasswordResetToken"];
-	let isAuth = split.indexOf('login') > -1 ||  split.indexOf('signup') > -1 ||   split.indexOf('resetPassword') > -1 ||  split.indexOf('requestPasswordResetToken') > -1;
-	if (isAuth) {
-		next();
-	}else {
-		let authorization = req.headers.authorization || "...";
-		if (authorization == "...") {
+	if (query) {
+		try {
+			let parsed = gql`${query}`;
+			let queryName = parsed.definitions[0].selectionSet.selections[0].name.value;
+			let auth = ["signup","resetPassword","requestPasswordResetToken","login"];
+			let isAuth = auth.indexOf(queryName) > -1;
+			if (isAuth) {
+				next();
+			}else {
+				let authorization = req.headers.authorization || "...";
+				if (authorization == "...") {
+					res.json({
+						errorMessageType: "Token missing",
+						errorMessage: "Please provide authorization token"
+					});
+					return false;
+				}
+				authorization = authorization.split(" ")[1];
+				authorization = authorization.replace("'", "");
+				authorization = authorization.replace("'", "");
+				var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
+				if (decoded.hasOwnProperty('validateFor')) {
+					next();
+					return true;
+				}else {
+					res.json({
+						status: false,
+						message: "Permission denied. Please check your authorization token"
+					})
+					return false;
+				}
+			}
+		} catch (e) {
 			res.json({
-				status: false,
-				message: "Please provide authorization token"
-			});
-			return false;
+				errorMessageType: "Error in query",
+				errorMessage: e.message
+			})
 		}
-		authorization = authorization.split(" ")[1];
-		authorization = authorization.replace("'", "");
-		authorization = authorization.replace("'", "");
-		var decoded = jwt.decode(authorization, 'secret') || {}; // pass empty object when decode failed
-		if (decoded.hasOwnProperty('validateFor')) {
+	}else {
+		if (method == 'get') {
 			next();
-			return true;
 		}else {
 			res.json({
-				status: false,
-				message: "Permission denied. Please check your authorization token"
+				errorMessageType: "Query not send",
+				errorMessage: "Please send query"
 			})
-			return false;
 		}
 	}
 }

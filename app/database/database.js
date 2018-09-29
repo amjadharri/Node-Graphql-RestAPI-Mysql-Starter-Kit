@@ -25,7 +25,7 @@ const DB = new Sequelize(APP__DB_NAME,APP__DB_USERNAME,APP__DB_PASSWORD,{
 const UserModel = DB.define('user',user);
 const ForgetPasswordModel = DB.define('forgetPassword',forgetPassword);
 
-makeRelations({
+makeRelations(DB,{
 	UserModel,
 	ForgetPasswordModel
 });

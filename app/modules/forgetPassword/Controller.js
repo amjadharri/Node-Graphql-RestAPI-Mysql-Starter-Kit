@@ -31,6 +31,7 @@ class ForgetPasswordController {
 						userId: user.id,
 						expireDate: `${moment().add('30','minutes').valueOf()}`
 					});
+					global.appEvents.onRequestPasswordResetToken();
 					return {
 						successMessageType: "Successfull",
 						successMessage:  "Please check your email. We have sent a link to reset your email"
@@ -70,6 +71,15 @@ class ForgetPasswordController {
 						}
 					});
 					if (user) {
+						sendEmail('changePassword.hbs',{
+							email: email,
+							siteName: process.env.APP__APP_NAME,
+							userName: email,
+						},{
+							from: 'ilyas.datoo@gmail.com',
+							to: email,
+							subject: `Password changed for ${process.env.APP__APP_NAME}`,
+						});
 						await user.updateAttributes({
 							password: bcrypt.hashSync(password, 10),
 						});
@@ -78,6 +88,8 @@ class ForgetPasswordController {
 								token: token 
 							}
 						});
+
+						global.appEvents.onResetPasword();
 						return {
 							successMessageType: "Password Changed", 
 							successMessage: `Password successfully changed for ${user.email}` 

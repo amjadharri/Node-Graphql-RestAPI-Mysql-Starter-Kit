@@ -33,7 +33,17 @@ class UserController {
 					username: username,
 					password: bcrypt.hashSync(password, 10)
 				});
+				sendEmail('welcome.hbs',{
+						userName: email,
+						siteName: process.env.APP__APP_NAME,
+						date: moment().format('dddd, MMMM Do YYYY, h:mm:ss a')
+					},{
+						from: 'ilyas.datoo@gmail.com',
+						to: email,
+						subject: `Welcome to ${process.env.APP__APP_NAME}`,
+					});
 				newUser.token = await createJwtToken(newUser);
+				global.appEvents.onUserSignup();
 				return newUser;
 			} else {
 				return {
@@ -56,6 +66,7 @@ class UserController {
 					where: {email: email}
 				})
 				if (user && bcrypt.compareSync(password, user.password)) {
+					global.appEvents.onUserLogin();
 					user.token = await createJwtToken(user);
 					return user
 				}else {
@@ -125,11 +136,14 @@ class UserController {
 					await user.updateAttributes({
 						password: bcrypt.hashSync(newPassword, 10),
 					});
-					mail.sendMail({
-						from: MAILER_SERVICE_USERNAME,
+					sendEmail('changePassword.hbs',{
+						email: email,
+						siteName: process.env.APP__APP_NAME,
+						userName: email,
+					},{
+						from: 'ilyas.datoo@gmail.com',
 						to: email,
-						subject: `Your Password is changed for ${APP__APP_NAME}`,
-						html: `We want to let you know that, at ${moment().format('dddd, MMMM Do YYYY, h:mm:ss a')} you have changed your password for ${APP__APP_NAME}.`
+						subject: `Password changed for ${process.env.APP__APP_NAME}`,
 					});
 					return { successMessageType: "Password Changed", successMessage: `Password successfully changed for ${user.email}` };
 				}else {
