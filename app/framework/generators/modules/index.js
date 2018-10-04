@@ -32,6 +32,10 @@ Example: name:string age: integer
         }
     ],
     actions: (data) => {
+        if (folderExists(data.name)) {
+            console.log("Folder already exists. Sorry please try again. exiting process");
+            process.exit();
+        }
         let actions = [];
         if (data.name && data.table && data.tableFields) {
             if (data.name) {
@@ -65,10 +69,11 @@ Example: name:string age: integer
                     path: `./../..//modules/${data.name}/Arguments.js`,
                     templateFile: './modules/templates/Arguments.hbs',
                 });
-            }
-            if (folderExists(data.name)) {
-                console.log("Folder already exists. Sorry please try again.");
-                return new Array();
+                actions.push({
+                    type: 'add',
+                    path: `./../..//modules/${data.name}/RestApi.js`,
+                    templateFile: './modules/templates/RestApi.hbs',
+                });
             }
             generateFolder(controllerName(data.name));
             return actions;

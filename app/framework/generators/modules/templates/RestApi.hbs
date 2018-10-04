@@ -1,0 +1,48 @@
+import Controller from "./Controller.js";
+import findBody from "../../framework/helpers/findBody.js";
+import response from "../../framework/helpers/response.js";
+
+
+class {{controllerName name}}RestApi {
+  async {{controllerName name}}Create() {
+    let body = findBody(req);
+    let data = await Controller.{{controllerName name}}Create(null, body);
+    response({
+      data, req, res, body
+    })
+  }
+  async {{controllerName name}}Update() {
+    let body = findBody(req);
+    let data = await Controller.{{controllerName name}}Update(null, body);
+    response({
+      data, req, res, body
+    })
+
+  }
+  async {{controllerName name}}View() {
+    let body = findBody(req);
+    let data = await Controller.{{controllerName name}}View(null, body);
+    response({
+      data, req, res, body
+    })
+
+  }
+  async {{controllerName name}}Delete() {
+    let body = findBody(req);
+    let data = await Controller.{{controllerName name}}Delete(null, body);
+    response({
+      data, req, res, body
+    })
+
+  }
+  async {{controllerName name}}ViewAll() {
+    let body = findBody(req);
+    let data = await Controller.{{controllerName name}}ViewAll(null, body);
+    response({
+      data, req, res, body
+    });
+  }
+}
+
+
+export default new {{controllerName name}}RestApi;

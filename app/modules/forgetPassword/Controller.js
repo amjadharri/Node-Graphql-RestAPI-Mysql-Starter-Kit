@@ -34,24 +34,28 @@ class ForgetPasswordController {
 					global.appEvents.onRequestPasswordResetToken();
 					return {
 						successMessageType: "Successfull",
-						successMessage:  "Please check your email. We have sent a link to reset your email"
+						successMessage:  "Please check your email. We have sent a link to reset your email",
+						statusCode: 'CREATED'
 					};
 				}else {
 					return {
 						errorMessage: "No User found",
-						errorMessageType: "No user found with that email"
+						errorMessageType: "No user found with that email",
+						statusCode: 'BAD_REQUEST'
 					};
 				}
 			}else {
 				return {
 					errorMessage: "Email and Return Url not provided",
-					errorMessageType: "Please provide your Email and Return Url"
+					errorMessageType: "Please provide your Email and Return Url",
+					statusCode: 'BAD_REQUEST'
 				};
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Error from our side",
-				errorMessage: e.message
+				errorMessage: e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			};
 		}
 	}
@@ -92,31 +96,36 @@ class ForgetPasswordController {
 						global.appEvents.onResetPasword();
 						return {
 							successMessageType: "Password Changed", 
-							successMessage: `Password successfully changed for ${user.email}` 
+							successMessage: `Password successfully changed for ${user.email}`,
+							statusCode: 'CREATED'
 						}
 					}else {
 						return {
 							errorMessageType: "User Not Found",
-							errorMessage: "User not found to update password."
+							errorMessage: "User not found to update password.",
+							statusCode: 'BAD_REQUEST'
 						}
 					}
 				}else {
 					return {
 						errorMessageType: "Token Mismatched",
-						errorMessage: "The token you provided is mismatched or expired."
+						errorMessage: "The token you provided is mismatched or expired.",
+						statusCode: 'BAD_REQUEST'
 					}
 				}
 			}else {
 			
 				return {
 					errorMessageType: "Details not provided",
-					errorMessage: "Please provide Token, Email and/or Password"
+					errorMessage: "Please provide Token, Email and/or Password",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Something went wrong",
 				errorMessage: "Something went wrong from our side. Message: " + e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}

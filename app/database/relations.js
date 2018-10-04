@@ -1,5 +1,4 @@
 // include other modules
-
 // import other models here and make relations
 export default function makeRelations(DB, initialModels) {
 	let {UserModel, ForgetPasswordModel} = initialModels;
@@ -7,5 +6,7 @@ export default function makeRelations(DB, initialModels) {
 	// user
 	UserModel.hasMany(ForgetPasswordModel);
 	ForgetPasswordModel.belongsTo(UserModel);
+
+	// 
 
 }

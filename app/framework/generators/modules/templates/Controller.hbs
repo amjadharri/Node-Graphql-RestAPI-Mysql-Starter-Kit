@@ -1,5 +1,4 @@
 import DB from "./../../database/database.js";
-import {validateAccessToken} from `${__dirname}/app/framework/validation/index.js`
 
 class {{controllerName name}}Controller {
 	constructor() {
@@ -7,7 +6,6 @@ class {{controllerName name}}Controller {
 	}
 	async {{controllerName name}}ViewAll(_, args) {
 		try {
-			await validateAccessToken();
 			let argsWhere = {...args};
 			delete argsWhere['page'];
 			delete argsWhere['limit'];
@@ -19,7 +17,8 @@ class {{controllerName name}}Controller {
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
@@ -27,48 +26,51 @@ class {{controllerName name}}Controller {
 
 	async {{controllerName name}}Create(_, args) {
 		try {
-			await validateAccessToken();
 			try {
-				return DB.models.{{toLowerCase name}}.create(args);
+				let model = await DB.models.{{toLowerCase name}}.create(args);
+				model.statusCode = 'CREATED';
+				return model;
 			}catch (e) {
 				return {
 					errorMessageType: 'Backend Error',
-					errorMessage: `Something went wrong while creating {{controllerName name}}, ${e.message}`
+					errorMessage: `Something went wrong while creating {{controllerName name}}, ${e.message}`,
+					statusCode: 'INTERNAL_SERVER_ERROR'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
 
 	async {{controllerName name}}Update(_, args) {
 		try {
-			await validateAccessToken();
-			let a = await DB.models.{{toLowerCase name}}.findById(args.id);
-			if (a) {
-				await a.updateAttributes(args);
-				return a;
+			let model = await DB.models.{{toLowerCase name}}.findById(args.id);
+			if (model) {
+				await model.updateAttributes(args);
+				model.statusCode = 'CREATED';
+				return model;
 			}else {
 				return {
 					errorMessageType: 'Not Found',
-					errorMessage: `Record not found to update.`
+					errorMessage: `Record not found to update.`,
+					statusCode: 'BAD_REQUEST'
 				}
 			}
-			return a;
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
 
 	async {{controllerName name}}Delete(_, args) {
 		try {
-			await validateAccessToken();
 			await DB.models.{{toLowerCase name}}.destroy({
 				where: {
 					id: args.id
@@ -76,24 +78,28 @@ class {{controllerName name}}Controller {
 			});
 			return {
 				successMessageType: '{{controllerName name}} Delete',
-				successMessage: `{{controllerName name}} Delete successfully`
+				successMessage: `{{controllerName name}} Delete successfully`,
+				statusCode: 'OK'
 			}
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
 
 	async {{controllerName name}}View(_, args) {
 		try {
-			await validateAccessToken();
-			return await DB.models.{{ toLowerCase name }}.findById(args.id);
+			let model = await DB.models.{{ toLowerCase name }}.findById(args.id);
+			model.statusCode = 'OK';
+			return model;
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}

@@ -5,10 +5,9 @@ import GraphQLHttp from 'express-graphql';
 import moment from "moment";
 
 import Schema from './app/Schema.js';
-import UserController from "./app/modules/user/Controller.js"
-import FogetPasswordController from "./app/modules/forgetPassword/Controller.js"
 import {validateAccessToken} from "./app/framework/validations/index.js";
 import appEvents from "./appEvents.js"
+import restService from "./rest.js"
 
 global.appEvents = appEvents;
 global.moment = moment;
@@ -22,10 +21,11 @@ global.appEvents.onLaunchApp();
 
 app.use(cors());
 
-app.use(bodyParser.json({
+app.use(bodyParser.urlencoded({
   extended: true,
-  json: true
+  json: true,
 }));
+app.use(bodyParser.json());
 
 
 app.use('/graphql', validateAccessToken , GraphQLHttp((req, res) => {
@@ -35,5 +35,7 @@ app.use('/graphql', validateAccessToken , GraphQLHttp((req, res) => {
 	graphiql: true,
 };
 }));
-
-app.listen(APP__PORT, () => console.log("app listening on port "+APP__PORT));
+restService(app);
+app.listen(APP__PORT, () => {
+  console.log("app listening on port " + APP__PORT)
+});

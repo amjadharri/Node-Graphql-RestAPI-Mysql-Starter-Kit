@@ -2,6 +2,7 @@ import Joi from "joi";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import gql from 'graphql-tag';
+let {APP__ALLOW_FAKE_AUTHORIZATION} = process.env;
 
 export async function validate(data, schema) {
 	try {
@@ -30,6 +31,12 @@ export async function validateAccessToken(req, res, next) {
 				next();
 			}else {
 				let authorization = req.headers.authorization || "...";
+				if (APP__ALLOW_FAKE_AUTHORIZATION == 'TRUE') {
+					if (authorization == 'fake') {
+						next();
+						return;
+					}
+				}
 				if (authorization == "...") {
 					res.json({
 						errorMessageType: "Token missing",

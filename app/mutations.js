@@ -7,6 +7,7 @@ import ForgetPasswordMutations from "./modules/ForgetPassword/Mutations.js";
 
 
 import {mutations} from "./customQueriesMutations";
+console.log(mutations)
 
 
 const Mutations = new GraphQLObjectType({

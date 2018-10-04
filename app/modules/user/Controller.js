@@ -10,10 +10,6 @@ import {sendEmail} from "./../../mailer/index.js"
 let { MAILER_SERVICE_USERNAME, APP__APP_NAME } = process.env;
 
 class UserController {
-
-
-
-
 	async signup(_, args) {
 		try {
 			let { username, email, password } = args;
@@ -25,7 +21,8 @@ class UserController {
 				if (user) {
 					return {
 						errorMessageType: "Already Registered",
-						errorMessage: `${email} is already is Registered`
+						errorMessage: `${email} is already is Registered`,
+						statusCode: 'BAD_REQUEST'
 					}
 				}
 				let newUser = await DB.models.user.create({
@@ -43,18 +40,21 @@ class UserController {
 						subject: `Welcome to ${process.env.APP__APP_NAME}`,
 					});
 				newUser.token = await createJwtToken(newUser);
+				newUser.statusCode = 'CREATED';
 				global.appEvents.onUserSignup();
 				return newUser;
 			} else {
 				return {
 					errorMessageType: "Missing details ",
-					errorMessage: "You have form issues please check your form."
+					errorMessage: "You have form issues please check your form.",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Error from our side",
-				errorMessage: e.message
+				errorMessage: e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
@@ -72,19 +72,22 @@ class UserController {
 				}else {
 					return {
 						errorMessageType: "Incorrect Password And/Or Email", 
-						errorMessage: "You have entered incorrect Password And/Or Email"
+						errorMessage: "You have entered incorrect Password And/Or Email",
+						statusCode: 'BAD_REQUEST'
 					}
 				}
 			}else {
 				return {
 					errorMessageType: "Missing details",
-					errorMessage: "Please enter your Email & Password"
+					errorMessage: "Please enter your Email & Password",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Error from our side",
-				errorMessage: e.message
+				errorMessage: e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
@@ -100,28 +103,49 @@ class UserController {
 				return {
 					errorMessageType: "No user found",
 					errorMessage: "No user found with that token",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 			token = await createJwtToken(user);
 			await user.updateAttributes({
 				token: token,
 			});
+			user.statusCode = 'CREATED';
 			return user;
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
 
 	async userView(_, args) {
 		try {
-			return await DB.models.user.findById(args.id);
+			let {id} = args;
+			if (!id) {
+				return {
+					errorMessageType: 'ID is required',
+					errorMessage: `ID is required to find user`,
+					statusCode: 'BAD_REQUEST'
+				}
+			}
+			let user = await DB.models.user.findById(args.id);
+			if (!user) {
+				return {
+					errorMessageType: 'User not found',
+					errorMessage: `User not found, please try again`,
+					statusCode: 'BAD_REQUEST'
+				}
+			}
+			user.statusCode = 'OK';
+			return user;
 		} catch (e) {
 			return {
 				errorMessageType: 'Backend Error',
-				errorMessage: `Something went wrong, ${e.message}`
+				errorMessage: `Something went wrong, ${e.message}`,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
@@ -129,6 +153,13 @@ class UserController {
 	async changePassword(_, args) {
 		try {
 			let {id, oldPassword, newPassword} = args;
+			if (!id || !oldPassword || !newPassword) {
+				return {
+					successMessageType: "Fields Required",
+					successMessage: `You must provide id, old password and new password`,
+					statusCode: 'BAD_REQUEST'
+				}
+			}
 			let user = await DB.models.user.findById(id);
 			if (user) {
 				let {email} = user;
@@ -145,20 +176,30 @@ class UserController {
 						to: email,
 						subject: `Password changed for ${process.env.APP__APP_NAME}`,
 					});
-					return { successMessageType: "Password Changed", successMessage: `Password successfully changed for ${user.email}` };
+					return { 
+						successMessageType: "Password Changed", 
+						successMessage: `Password successfully changed for ${user.email}`,
+						statusCode: 'CREATED'
+					};
 				}else {
-					return { errorMessageType: "Incorrect Password", errorMessage: "You have entered incorrect Password" };
+					return { 
+						errorMessageType: "Incorrect Password", 
+						errorMessage: "You have entered incorrect Password",
+						statusCode: 'CREATED'
+					};
 				}
 			}else {
 				return {
 					errorMessageType: "No User found.",
-					errorMessage: "No user found please try again"
+					errorMessage: "No user found please try again",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Error from our side",
-				errorMessage: e.message
+				errorMessage: e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
@@ -173,18 +214,21 @@ class UserController {
 				});
 				return {
 					successMessageType: "Profile Updated",
-					successMessage: "Profile updated successfully"
+					successMessage: "Profile updated successfully",
+					statusCode: 'CREATED'
 				}
 			}else {
 				return {
 					errorMessageType: "No User found",
-					errorMessage: "No user found please try again."
+					errorMessage: "No user found please try again.",
+					statusCode: 'BAD_REQUEST'
 				}
 			}
 		} catch (e) {
 			return {
 				errorMessageType: "Error from our side",
-				errorMessage: e.message
+				errorMessage: e.message,
+				statusCode: 'INTERNAL_SERVER_ERROR'
 			}
 		}
 	}
