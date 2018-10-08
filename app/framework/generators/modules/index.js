@@ -8,17 +8,7 @@ module.exports = {
         {
             type: 'input',
             name: 'name',
-            message: 'Please enter the module name (lowercase):',
-        },
-        {
-            type: 'input',
-            name: 'table',
-            message: 'Please enter the table name (lowercase):',
-        },
-        {
-            type: 'input',
-            name: 'controllerName',
-            message: 'Please enter the controller name (lowercase)',
+            message: 'Please enter the module name, this includes name of Model,Table,schemaName and Controller Name (lowercase):',
         },
         {
             type: 'input',
@@ -37,7 +27,7 @@ Example: name:string age: integer
             process.exit();
         }
         let actions = [];
-        if (data.name && data.table && data.tableFields) {
+        if (data.name && data.tableFields) {
             if (data.name) {
                 actions.push({
                     type: 'add',

@@ -6,7 +6,6 @@ export default function (name) {
   let output = "";
   array.map((a) => {
     let { columnName, columnType } = splitFieldAndType(a);
-    console.log(columnName, columnType, name);
     if (supportedTypes.indexOf(columnType.toUpperCase()) > -1) {
       output = output + `
 	${columnName}: {

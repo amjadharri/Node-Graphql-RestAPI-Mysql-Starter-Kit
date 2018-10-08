@@ -5,6 +5,7 @@ export default function (obj) {
     res.json(data);
     return;
   }
+  console.log("You didn't provide status please provide status code for this Rest/GraphQL call.")
   res.status(statusCodes[data.statusCode]).json(data);
   return;
 }
