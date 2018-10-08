@@ -13,4 +13,3 @@ Here are the list of upcoming features for this project:
 
 	1. Connecting your app with aws.
 	2. Passport Integration
-	3. 
